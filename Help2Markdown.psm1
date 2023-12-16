@@ -101,7 +101,7 @@ class HelpGenerator {
         if ($this.OutputTypes) {
             $sb.AppendLine("## Outputs")
             $sb.AppendLine()
-            foreach ($line in $this.InputTypes) {
+            foreach ($line in $this.OutputTypes) {
                 $sb.AppendLine((' - `{0}`' -f $line))
             }
             $sb.AppendLine()
