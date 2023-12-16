@@ -5,9 +5,9 @@ Convert Help in the module to Markdown documents
 ## Syntax
 
   1. (Module)  
-     Convert-Help2Markdown [`-Module <string>`](#parameter-module) [`[[-Cmds] <String[]>]`](#parameter-cmds) `[<CommonParameters>]`
+     Convert-Help2Markdown [`-Module <string>`](#parameter-module) [`[-OutDir <DirectoryInfo>]`](#parameter-outdir) [`[[-Cmds] <String[]>]`](#parameter-cmds) `[<CommonParameters>]`
   2. (Cmds)  
-     Convert-Help2Markdown [`[-Cmds] <String[]>`](#parameter-cmds) `[<CommonParameters>]`
+     Convert-Help2Markdown [`[-OutDir <DirectoryInfo>]`](#parameter-outdir) [`[-Cmds] <String[]>`](#parameter-cmds) `[<CommonParameters>]`
 
 ## Parameters
 
@@ -19,11 +19,26 @@ Module name will be imported
 |:----------- |:-------------------
 | Type        | String
 | Alias       | m
-| Group       | Module              
-| Position    | Named               
-| Required    | ✅                  
-| Pipeline    | -                   
-| RemaingArgs |  -                 
+| Group       | Module
+| Position    | Named
+| Required    | ✅
+| Pipeline    | -
+| RemaingArgs |  -
+
+### Parameter`-OutDir`
+
+Output directory.
+If specified, `<Command-Name>.md` files are created to the directory and returns the `FileInfo` objects.
+
+| Name        | Value
+|:----------- |:-------------------
+| Type        | DirectoryInfo
+| Alias       | o
+| Group       | (ALL)
+| Position    | Named
+| Required    |  -
+| Pipeline    | -
+| RemaingArgs |  -
 
 ### Parameter`-Cmds`
 
@@ -34,12 +49,12 @@ Command names
 | Type        | String[]
 | Alias       | 
 
-| By Group    | Cmds                | Module              
-|:----------- |:------------------- |:------------------- 
-| Position    | 0                   | 1                   
-| Required    | ✅                  |  -                 
-| Pipeline    | ByValue             | ByValue             
-| RemaingArgs | ✅                  | ✅                  
+| By Group    | Cmds                | Module
+|:----------- |:------------------- |:-------------------
+| Position    | 0                   | 1
+| Required    | ✅                  |  -
+| Pipeline    | ByValue             | ByValue
+| RemaingArgs | ✅                  | ✅
 
 
 ## Pipeline Inputs
@@ -49,6 +64,7 @@ Command names
 ## Outputs
 
  - `string`
+ - `FileInfo`
 
 ## Examples
 
@@ -63,3 +79,5 @@ Convert Help in the module to Markdown documents
 ## Syntax
 (Snip)
 ```
+
+

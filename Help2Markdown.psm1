@@ -327,15 +327,15 @@ class ParameterDetailTable {
         $sb = [StringBuilder]::new();
         if ($this.Table.Count -gt 1) {
             $sb.AppendLine();
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("| By Group    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("|:----------- "); } -Process { $sb.AppendFormat("|:{0} ", ("-" * 19)); } -End { $sb.AppendLine() }
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "| By Group    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "|:----------- "; } -Process { "|:{0} " -f ("-" * 19); }) -join "").Trim())
         } else {
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("| Group       "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "| Group       "; } -Process { "| {0,-20}" -f  $_; }) -join "").Trim())
         }
-        $this.Table.Values.Position      | ForEach-Object -Begin { $sb.Append("| Position    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.Required      | ForEach-Object -Begin { $sb.Append("| Required    "); } -Process { $sb.AppendFormat("| {0,-19}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.Pipeline      | ForEach-Object -Begin { $sb.Append("| Pipeline    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.RemainingArgs | ForEach-Object -Begin { $sb.Append("| RemaingArgs "); } -Process { $sb.AppendFormat("| {0,-19}", $_); } -End { $sb.AppendLine() }
+        $sb.AppendLine((($this.Table.Values.Position      | ForEach-Object -Begin { "| Position    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.Required      | ForEach-Object -Begin { "| Required    "; } -Process { "| {0,-19}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.Pipeline      | ForEach-Object -Begin { "| Pipeline    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.RemainingArgs | ForEach-Object -Begin { "| RemaingArgs "; } -Process { "| {0,-19}" -f $_; }) -join "").Trim())
         return $sb.ToString()
     }
 }
@@ -391,6 +391,10 @@ function Convert-Help2Markdown {
         .PARAMETER Module
         Module name will be imported
 
+        .PARAMETER OutDir
+        Output directory.
+        If specified, `<Command-Name>.md` files are created to the directory and returns the `FileInfo` objects.
+
         .PARAMETER Cmds
         Command names
 
@@ -412,10 +416,13 @@ function Convert-Help2Markdown {
     #>
     [CmdletBinding()]
     [OutputType([string])]
+    [OutputType([System.IO.FileInfo])]
     param(
         [Parameter(ParameterSetName="Module", Mandatory)]
         [Alias("m")]
         [string] $Module,
+        [Alias("o")]
+        [System.IO.DirectoryInfo] $OutDir,
         [Parameter(ParameterSetName="Module", ValueFromPipeline, position=1, ValueFromRemainingArguments)]
         [Parameter(ParameterSetName="Cmds", Mandatory, ValueFromPipeline, position=0, ValueFromRemainingArguments)]
         [string[]] $Cmds
@@ -447,7 +454,13 @@ function Convert-Help2Markdown {
         $commands | Get-Command  | ForEach-Object {
             Write-Verbose ("{0} ({1})" -f $_.Name, $_.ModuleName)
             $md = [HelpGenerator]::new($_);
-            $md.GenerateMarkdown()
+            if ($OutDir) {
+                $File = Join-Path $OutDir ("{0}.md" -f $md.Help.name)
+                $md.GenerateMarkdown() | Out-File -FilePath $File -Encoding utf8
+                Get-Item -Path $File | Write-Output
+            } else {
+                $md.GenerateMarkdown() | Write-Output
+            }
         }
     }
 }
