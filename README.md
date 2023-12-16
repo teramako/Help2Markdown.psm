@@ -7,6 +7,8 @@ Convert Help to Markdown Document
 Convert-Help2Markdown Command-Name ...
 ```
 
+See: [Convert-Help2Markdown for command detail](docs/Convert-Help2Markdown.md)
+
 ### Example
 
 ```
