@@ -1,0 +1,7 @@
+# git ttributes for PowerShell
+[attr]powershell text eol=crlf working-tree-encoding=utf-8
+*.ps1 powershell
+*.psd1 powershell
+*.psm1 powershell
+*.ps1xml powershell
+
