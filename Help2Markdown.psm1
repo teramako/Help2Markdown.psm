@@ -391,6 +391,10 @@ function Convert-Help2Markdown {
         .PARAMETER Module
         Module name will be imported
 
+        .PARAMETER OutDir
+        Output directory.
+        If specified, `<Command-Name>.md` files are created to the directory and returns the `FileInfo` objects.
+
         .PARAMETER Cmds
         Command names
 
@@ -412,10 +416,13 @@ function Convert-Help2Markdown {
     #>
     [CmdletBinding()]
     [OutputType([string])]
+    [OutputType([System.IO.FileInfo])]
     param(
         [Parameter(ParameterSetName="Module", Mandatory)]
         [Alias("m")]
         [string] $Module,
+        [Alias("o")]
+        [System.IO.DirectoryInfo] $OutDir,
         [Parameter(ParameterSetName="Module", ValueFromPipeline, position=1, ValueFromRemainingArguments)]
         [Parameter(ParameterSetName="Cmds", Mandatory, ValueFromPipeline, position=0, ValueFromRemainingArguments)]
         [string[]] $Cmds
@@ -447,7 +454,13 @@ function Convert-Help2Markdown {
         $commands | Get-Command  | ForEach-Object {
             Write-Verbose ("{0} ({1})" -f $_.Name, $_.ModuleName)
             $md = [HelpGenerator]::new($_);
-            $md.GenerateMarkdown()
+            if ($OutDir) {
+                $File = Join-Path $OutDir ("{0}.md" -f $md.Help.name)
+                $md.GenerateMarkdown() | Out-File -FilePath $File -Encoding utf8
+                Get-Item -Path $File | Write-Output
+            } else {
+                $md.GenerateMarkdown() | Write-Output
+            }
         }
     }
 }
