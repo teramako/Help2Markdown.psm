@@ -327,15 +327,15 @@ class ParameterDetailTable {
         $sb = [StringBuilder]::new();
         if ($this.Table.Count -gt 1) {
             $sb.AppendLine();
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("| By Group    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("|:----------- "); } -Process { $sb.AppendFormat("|:{0} ", ("-" * 19)); } -End { $sb.AppendLine() }
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "| By Group    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "|:----------- "; } -Process { "|:{0} " -f ("-" * 19); }) -join "").Trim())
         } else {
-            $this.Table.Values.Name      | ForEach-Object -Begin { $sb.Append("| Group       "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
+            $sb.AppendLine((($this.Table.Values.Name      | ForEach-Object -Begin { "| Group       "; } -Process { "| {0,-20}" -f  $_; }) -join "").Trim())
         }
-        $this.Table.Values.Position      | ForEach-Object -Begin { $sb.Append("| Position    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.Required      | ForEach-Object -Begin { $sb.Append("| Required    "); } -Process { $sb.AppendFormat("| {0,-19}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.Pipeline      | ForEach-Object -Begin { $sb.Append("| Pipeline    "); } -Process { $sb.AppendFormat("| {0,-20}", $_); } -End { $sb.AppendLine() }
-        $this.Table.Values.RemainingArgs | ForEach-Object -Begin { $sb.Append("| RemaingArgs "); } -Process { $sb.AppendFormat("| {0,-19}", $_); } -End { $sb.AppendLine() }
+        $sb.AppendLine((($this.Table.Values.Position      | ForEach-Object -Begin { "| Position    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.Required      | ForEach-Object -Begin { "| Required    "; } -Process { "| {0,-19}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.Pipeline      | ForEach-Object -Begin { "| Pipeline    "; } -Process { "| {0,-20}" -f $_; }) -join "").Trim())
+        $sb.AppendLine((($this.Table.Values.RemainingArgs | ForEach-Object -Begin { "| RemaingArgs "; } -Process { "| {0,-19}" -f $_; }) -join "").Trim())
         return $sb.ToString()
     }
 }
