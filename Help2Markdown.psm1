@@ -414,6 +414,7 @@ function Convert-Help2Markdown {
     [OutputType([string])]
     param(
         [Parameter(ParameterSetName="Module", Mandatory)]
+        [Alias("m")]
         [string] $Module,
         [Parameter(ParameterSetName="Module", ValueFromPipeline, position=1, ValueFromRemainingArguments)]
         [Parameter(ParameterSetName="Cmds", Mandatory, ValueFromPipeline, position=0, ValueFromRemainingArguments)]
