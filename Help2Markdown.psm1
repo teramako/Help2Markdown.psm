@@ -317,7 +317,7 @@ class ParameterDetailTable {
         $sb.AppendLine(("| Name        | Value"));
         $sb.AppendLine(("|:----------- |:{0}" -f ("-" * 19)));
         $sb.AppendLine(("| Type        | {0}" -f $this.Type));
-        $sb.AppendLine(("| Alias       | {0}" -f ($this.Aliaes -join ", ")));
+        $sb.AppendLine(("| Alias       | {0}" -f ($this.Aliases -join ", ")));
         if ($this.DefaultValue) {
         $sb.AppendLine(("| Default     | {0}" -f $this.DefaultValue));
         }
